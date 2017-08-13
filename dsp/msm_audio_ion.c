@@ -740,6 +740,9 @@ static int msm_audio_smmu_init(struct device *dev)
 	struct iommu_group *grp = NULL;
 	int ret;
 
+	/* Give a chance to DMA APIs to register an IOMMU master */
+	of_dma_configure(dev, dev->of_node);
+
 	mapping = arm_iommu_create_mapping(&platform_bus_type,
 					   MSM_AUDIO_ION_VA_START,
 					   MSM_AUDIO_ION_VA_LEN);
