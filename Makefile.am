@@ -3,7 +3,7 @@ KBUILD_OPTIONS += MODNAME=audio
 KBUILD_OPTIONS += HEADER_INSTALL_DIR=$(KERNEL_SRC)/scripts
 KBUILD_OPTIONS += UAPI_OUT=$(PWD)
 
-ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm670 qcs605))
+ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm660 sdm670 qcs605))
 KBUILD_OPTIONS += CONFIG_ARCH_SDM670=y
 endif
 ifeq ($(TARGET_SUPPORT),sdm845)
@@ -22,13 +22,13 @@ obj-m += dsp/codecs/
 obj-m += soc/
 obj-m += asoc/
 obj-m += asoc/codecs/
-ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm670 qcs605))
+ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm660 sdm670 qcs605))
 obj-m += asoc/codecs/wcd934x/
 endif
-ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), apq8053 sdm670 qcs605 apq8009))
+ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), apq8053 sdm660 sdm670 qcs605 apq8009))
 obj-m += asoc/codecs/sdm660_cdc/
 endif
-ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm670 qcs605))
+ifeq ($(TARGET_SUPPORT), $(filter $(TARGET_SUPPORT), sdm660 sdm670 qcs605))
 obj-m += asoc/codecs/msm_sdw/
 endif
 
