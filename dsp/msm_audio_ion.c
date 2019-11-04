@@ -811,6 +811,7 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 	const char *msm_audio_ion_dt = "qcom,smmu-enabled";
 	const char *msm_audio_ion_smmu = "qcom,smmu-version";
 	const char *msm_audio_ion_smmu_sid_mask = "qcom,smmu-sid-mask";
+	const char *smmu_sid_dt = "qcom,smmu-sid";
 	bool smmu_enabled;
 	enum apr_subsys_state q6_state;
 	struct device *dev = &pdev->dev;
@@ -874,6 +875,11 @@ static int msm_audio_ion_probe(struct platform_device *pdev)
 				__func__, rc);
 		else
 			smmu_sid = (iommuspec.args[0] & smmu_sid_mask);
+
+		rc = of_property_read_u32(pdev->dev.of_node,
+				smmu_sid_dt, (u32 *)&smmu_sid);
+		if (rc)
+			pr_debug("could not get smmu id\n");
 
 		msm_audio_ion_data.smmu_sid_bits =
 			smmu_sid << MSM_AUDIO_SMMU_SID_OFFSET;
