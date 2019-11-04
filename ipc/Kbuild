@@ -28,7 +28,9 @@ endif
 ifeq ($(CONFIG_ARCH_MSM8909), y)
 	TARGET_KERNEL_VERSION := 4.9
 endif
-
+ifeq ($(CONFIG_ARCH_MSM8916), y)
+	TARGET_KERNEL_VERSION := 4.9
+endif
 ifeq ($(CONFIG_ARCH_MSM8917), y)
 	TARGET_KERNEL_VERSION := 4.9
 endif
@@ -75,6 +77,11 @@ ifeq ($(KERNEL_BUILD), 0)
 			export
 			INCS    +=  -include $(AUDIO_ROOT)/config/msm8905autoconf.h
 		endif
+	endif
+	ifeq ($(CONFIG_ARCH_MSM8916), y)
+		include $(AUDIO_ROOT)/config/sdm450auto.conf
+		export
+		INCS    +=  -include $(AUDIO_ROOT)/config/sdm450autoconf.h
 	endif
 	ifeq ($(CONFIG_ARCH_MSM8917), y)
 		include $(AUDIO_ROOT)/config/sdm450auto.conf
