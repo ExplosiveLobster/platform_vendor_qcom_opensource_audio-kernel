@@ -3,7 +3,7 @@ MY_LOCAL_PATH := $(call my-dir)
 
 UAPI_OUT := $(PRODUCT_OUT)/obj/vendor/qcom/opensource/audio-kernel/include
 
-ifeq ($(call is-board-platform-in-list,msm8909 msm8953 msm8937 sdm660 sdm845 sdm710 qcs605),true)
+ifeq ($(call is-board-platform-in-list,msm8909 msm8952 msm8953 msm8937 sdm660 sdm845 sdm710 qcs605),true)
 $(shell mkdir -p $(UAPI_OUT)/linux;)
 $(shell mkdir -p $(UAPI_OUT)/sound;)
 $(shell rm -rf $(PRODUCT_OUT)/obj/vendor/qcom/opensource/audio-kernel/ipc/Module.symvers)
@@ -29,7 +29,7 @@ $(shell rm -rf $(PRODUCT_OUT)/obj/vendor/qcom/opensource/audio-kernel/asoc/codec
 include $(MY_LOCAL_PATH)/asoc/codecs/msm_bg/Android.mk
 endif
 
-ifeq ($(call is-board-platform-in-list,msm8953 msm8937 sdm660 sdm710 qcs605 msm8909),true)
+ifeq ($(call is-board-platform-in-list,msm8952 msm8953 msm8937 sdm660 sdm710 qcs605 msm8909),true)
 $(shell rm -rf $(PRODUCT_OUT)/obj/vendor/qcom/opensource/audio-kernel/asoc/codecs/sdm660_cdc/Module.symvers)
 $(shell rm -rf $(PRODUCT_OUT)/obj/vendor/qcom/opensource/audio-kernel/asoc/codecs/msm_sdw/Module.symvers)
 include $(MY_LOCAL_PATH)/asoc/codecs/sdm660_cdc/Android.mk
