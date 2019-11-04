@@ -38,6 +38,9 @@
 #define NUM_CHANNELS_STEREO 2
 #define NUM_CHANNELS_THREE 3
 #define NUM_CHANNELS_QUAD 4
+#ifdef CONFIG_ARCH_SONY_LOIRE
+#define CVP_VERSION_1 1
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 #define CVP_VERSION_2 2
 #define GAIN_Q14_FORMAT(a) (a << 14)
 
@@ -4349,6 +4352,10 @@ static int voice_get_avcs_version_per_service(uint32_t service_id)
 	int ret = 0;
 	size_t ver_size;
 	struct avcs_fwk_ver_info *ver_info = NULL;
+
+#ifdef CONFIG_ARCH_SONY_LOIRE
+	return CVP_VERSION_1;
+#endif /* CONFIG_ARCH_SONY_LOIRE */
 
 	if (service_id == AVCS_SERVICE_ID_ALL) {
 		pr_err("%s: Invalid service id: %d", __func__,
