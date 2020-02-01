@@ -54,6 +54,11 @@ ifeq ($(KERNEL_BUILD), 0)
 		export
 		INCS    +=  -include $(AUDIO_ROOT)/config/qcs405autoconf.h
 	endif
+	ifeq ($(CONFIG_ARCH_MSM8916), y)
+		include $(AUDIO_ROOT)/config/msm8952auto.conf
+		export
+		INCS    +=  -include $(AUDIO_ROOT)/config/msm8952autoconf.h
+	endif
 endif
 
 # As per target team, build is done as follows:
@@ -105,7 +110,14 @@ ifdef CONFIG_SND_SOC_WCD9XXX_V2
 	WCD9XXX_OBJS += wcd9xxx-soc-init.o
 	WCD9XXX_OBJS += wcd-dsp-utils.o
 	WCD9XXX_OBJS += wcd-dsp-mgr.o
+endif
+
+ifdef CONFIG_COMMON_CLK_QCOM
 	WCD9XXX_OBJS += audio-ext-clk-up.o
+endif
+
+ifdef CONFIG_COMMON_CLK_MSM
+	WCD9XXX_OBJS += audio-ext-clk.o
 endif
 
 ifdef CONFIG_SND_SOC_WCD9335

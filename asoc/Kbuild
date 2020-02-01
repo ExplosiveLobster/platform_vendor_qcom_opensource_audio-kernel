@@ -54,6 +54,11 @@ ifeq ($(KERNEL_BUILD), 0)
 		export
 		INCS    +=  -include $(AUDIO_ROOT)/config/qcs405autoconf.h
 	endif
+	ifeq ($(CONFIG_ARCH_MSM8916), y)
+		include $(AUDIO_ROOT)/config/msm8952auto.conf
+		export
+		INCS    +=  -include $(AUDIO_ROOT)/config/msm8952autoconf.h
+	endif
 endif
 
 # As per target team, build is done as follows:
@@ -119,6 +124,15 @@ endif
 # for qcs405 sound card driver
 ifdef CONFIG_SND_SOC_QCS405
 	MACHINE_OBJS += qcs405.o
+endif
+
+# for MSM8952 sound card driver
+ifdef CONFIG_SND_SOC_MSM8952
+# TODO: both drivers have the same plaform driver name. so we have to separate them.
+# Temp comment out internal codec because we use tasha external coodec.
+#	MACHINE_OBJS += msm8952.o
+	MACHINE_OBJS += msm8952-slimbus.o
+	MACHINE_OBJS += msm8952-dai-links.o
 endif
 
 ifdef CONFIG_SND_SOC_CPE
@@ -222,6 +236,9 @@ obj-$(CONFIG_SND_SOC_SM6150) += machine_dlkm.o
 machine_dlkm-y := $(MACHINE_OBJS)
 
 obj-$(CONFIG_SND_SOC_QCS405) += machine_dlkm.o
+machine_dlkm-y := $(MACHINE_OBJS)
+
+obj-$(CONFIG_SND_SOC_MSM8952) += machine_dlkm.o
 machine_dlkm-y := $(MACHINE_OBJS)
 
 obj-$(CONFIG_SND_SOC_EXT_CODEC) += machine_dlkm.o

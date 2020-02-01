@@ -265,7 +265,7 @@ int msm895x_wsa881x_init(struct snd_soc_component *component)
 				__func__, codec->component.name);
 		wsa881x_set_channel_map(codec, &spkleft_ports[0],
 				WSA881X_MAX_SWR_PORTS, &ch_mask[0],
-				&ch_rate[0]);
+				&ch_rate[0], NULL);
 		if (dapm->component) {
 			snd_soc_dapm_ignore_suspend(dapm, "SpkrLeft IN");
 			snd_soc_dapm_ignore_suspend(dapm, "SpkrLeft SPKR");
@@ -275,7 +275,7 @@ int msm895x_wsa881x_init(struct snd_soc_component *component)
 				__func__, codec->component.name);
 		wsa881x_set_channel_map(codec, &spkright_ports[0],
 				WSA881X_MAX_SWR_PORTS, &ch_mask[0],
-				&ch_rate[0]);
+				&ch_rate[0], NULL);
 		if (dapm->component) {
 			snd_soc_dapm_ignore_suspend(dapm, "SpkrRight IN");
 			snd_soc_dapm_ignore_suspend(dapm, "SpkrRight SPKR");
@@ -3344,7 +3344,7 @@ int msm_audrx_init(struct snd_soc_pcm_runtime *rtd)
 	if (rtd->card->num_aux_devs &&
 	!list_empty(&rtd->card->aux_comp_list)) {
 		aux_comp = list_first_entry(&rtd->card->aux_comp_list,
-					struct snd_soc_component, list_aux);
+					struct snd_soc_component, card_aux_list);
 		if (!strcmp(aux_comp->name, WSA8810_NAME_1) ||
 		!strcmp(aux_comp->name, WSA8810_NAME_2)) {
 			tasha_set_spkr_mode(rtd->codec, SPKR_MODE_1);

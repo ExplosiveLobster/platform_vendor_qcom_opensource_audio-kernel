@@ -5438,6 +5438,7 @@ int q6asm_enc_cfg_blk_pcm_format_support_v3(struct audio_client *ac,
 					    uint16_t bits_per_sample,
 					    uint16_t sample_word_size)
 {
+	return __q6asm_enc_cfg_blk_pcm(ac, rate, channels, bits_per_sample);
 	return __q6asm_enc_cfg_blk_pcm_v3(ac, rate, channels,
 					  bits_per_sample, sample_word_size);
 }
@@ -6216,6 +6217,10 @@ static int __q6asm_media_format_block_pcm_v3(struct audio_client *ac,
 		return -EINVAL;
 	}
 
+	return __q6asm_media_format_block_pcm(ac, rate, channels,
+					stream_id, bits_per_sample,
+					use_default_chmap, channel_map);
+
 	pr_debug("%s: session[%d]rate[%d]ch[%d]bps[%d]wordsize[%d]\n", __func__,
 		 ac->session, rate, channels,
 		 bits_per_sample, sample_word_size);
@@ -6285,6 +6290,11 @@ static int __q6asm_media_format_block_pcm_v3(struct audio_client *ac,
 fail_cmd:
 	return rc;
 }
+
+static int __q6asm_media_format_block_multi_ch_pcm(struct audio_client *ac,
+				uint32_t rate, uint32_t channels,
+				bool use_default_chmap, char *channel_map,
+				uint16_t bits_per_sample);
 
 static int __q6asm_media_format_block_pcm_v4(struct audio_client *ac,
 					     uint32_t rate, uint32_t channels,
@@ -6396,6 +6406,10 @@ static int __q6asm_media_format_block_pcm_v5(struct audio_client *ac,
 		pr_err("%s: Invalid channel count %d\n", __func__, channels);
 		return -EINVAL;
 	}
+
+	return __q6asm_media_format_block_multi_ch_pcm(ac, rate, channels,
+					use_default_chmap, channel_map,
+					bits_per_sample);
 
 	pr_debug("%s: session[%d]rate[%d]ch[%d]bps[%d]wordsize[%d]\n", __func__,
 		 ac->session, rate, channels,

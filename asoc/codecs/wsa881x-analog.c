@@ -61,6 +61,7 @@ struct wsa881x_pdata {
 	bool wsa_active;
 	int index;
 	struct clk *wsa_mclk;
+	int (*enable_mclk)(struct snd_soc_card *, bool);
 	struct wsa881x_tz_priv tz_pdata;
 	int bg_cnt;
 	int clk_cnt;
@@ -94,6 +95,7 @@ const char *wsa_tz_names[] = {"wsa881x.0e", "wsa881x.0f"};
 
 struct wsa881x_pdata wsa_pdata[MAX_WSA881X_DEVICE];
 
+static bool pinctrl_init;
 
 static int wsa881x_populate_dt_pdata(struct device *dev, int wsa881x_index);
 static int wsa881x_reset(struct wsa881x_pdata *pdata, bool enable);
@@ -890,8 +892,6 @@ static const struct snd_soc_dapm_route wsa881x_audio_map[] = {
 static int wsa881x_startup(struct wsa881x_pdata *pdata)
 {
 	int ret = 0;
-	struct snd_soc_codec *codec = pdata->codec;
-	struct snd_soc_card *card = codec->component.card;
 
 	pr_debug("%s(): wsa startup, enable_cnt:%d\n", __func__,
 					pdata->enable_cnt);
@@ -913,7 +913,6 @@ static int wsa881x_startup(struct wsa881x_pdata *pdata)
 static int wsa881x_shutdown(struct wsa881x_pdata *pdata)
 {
 	int ret = 0;
-	struct snd_soc_codec *codec = pdata->codec;
 
 	pr_debug("%s(): wsa shutdown, enable_cnt:%d\n", __func__,
 					pdata->enable_cnt);
