@@ -21,9 +21,14 @@
 #include <linux/platform_device.h>
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
-#include <dt-bindings/clock/msm-clocks-8996.h>
 #include <dsp/q6afe-v2.h>
 #include "audio-ext-clk.h"
+
+#ifdef CONFIG_ARCH_MSM8916
+#include <dt-bindings/clock/msm-clocks-8976.h>
+#else
+#include <dt-bindings/clock/msm-clocks-8996.h>
+#endif
 
 enum audio_clk_mux {
 	PMI_CLK,
