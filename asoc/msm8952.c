@@ -3120,9 +3120,11 @@ parse_mclk_freq:
 						__func__, ret);
 				goto err;
 			}
-			wsa881x_set_mclk_callback(msm8952_enable_wsa_mclk);
+			//wsa881x_set_mclk_callback(msm8952_enable_wsa_mclk);
+#if IS_ENABLED(CONFIG_SND_SOC_ANALOG_CDC)
 			/* update the internal speaker boost usage */
 			msm_anlg_cdc_update_int_spk_boost(false);
+#endif
 		}
 	}
 
