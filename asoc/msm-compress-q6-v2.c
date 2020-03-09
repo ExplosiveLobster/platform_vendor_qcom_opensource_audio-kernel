@@ -1031,6 +1031,16 @@ static int msm_compr_send_media_format_block(struct snd_compr_stream *cstream,
 					ASM_LITTLE_ENDIAN,
 					DEFAULT_QF);
 		} else {
+#ifdef CONFIG_ARCH_MSM8916
+			ret = q6asm_media_format_block_pcm_format_support_v3(
+					prtd->audio_client,
+					prtd->sample_rate,
+					prtd->num_channels,
+					bit_width, stream_id,
+					use_default_chmap,
+					chmap,
+					sample_word_size);
+#else
 			ret = q6asm_media_format_block_pcm_format_support_v4(
 					prtd->audio_client,
 					prtd->sample_rate,
@@ -1041,6 +1051,7 @@ static int msm_compr_send_media_format_block(struct snd_compr_stream *cstream,
 					sample_word_size,
 					ASM_LITTLE_ENDIAN,
 					DEFAULT_QF);
+#endif /* CONFIG_ARCH_MSM8916 */
 		}
 		if (ret < 0)
 			pr_err("%s: CMD Format block failed\n", __func__);
@@ -1365,10 +1376,17 @@ static int msm_compr_configure_dsp_for_playback
 				ac->stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
 		else
+#ifdef CONFIG_ARCH_MSM8916
+			ret = q6asm_stream_open_write_v3(ac,
+				prtd->codec, bits_per_sample,
+				ac->stream_id,
+				prtd->gapless_state.use_dsp_gapless_mode);
+#else
 			ret = q6asm_stream_open_write_v4(ac,
 				prtd->codec, bits_per_sample,
 				ac->stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
+#endif /* CONFIG_ARCH_MSM8916 */
 		if (ret < 0) {
 			pr_err("%s:ASM open write err[%d] for compr type[%d]\n",
 				__func__, ret, prtd->compr_passthr);
@@ -1510,6 +1528,11 @@ static int msm_compr_configure_dsp_for_capture(struct snd_compr_stream *cstream)
 			return ret;
 		}
 	} else {
+#ifdef CONFIG_ARCH_MSM8916
+		ret = q6asm_open_read_v3(prtd->audio_client,
+			prtd->codec,
+			bits_per_sample);
+#else
 		if (prtd->codec_param.codec.flags & COMPRESSED_TIMESTAMP_FLAG) {
 			ret = q6asm_open_read_v4(prtd->audio_client,
 					prtd->codec,
@@ -1519,6 +1542,7 @@ static int msm_compr_configure_dsp_for_capture(struct snd_compr_stream *cstream)
 					prtd->codec,
 					bits_per_sample, false, enc_cfg_id);
 		}
+#endif /* CONFIG_ARCH_MSM8916 */
 		if (ret < 0) {
 			pr_err("%s: q6asm_open_read failed:%d\n",
 					__func__, ret);
@@ -1588,10 +1612,16 @@ static int msm_compr_configure_dsp_for_capture(struct snd_compr_stream *cstream)
 			prtd->num_channels, prtd->codec,
 			(void *)&prtd->codec_param.codec.options.generic);
 	} else if (prtd->compr_passthr == LEGACY_PCM) {
+#ifdef CONFIG_ARCH_MSM8916
+		ret = q6asm_enc_cfg_blk_pcm_format_support_v3(prtd->audio_client,
+					prtd->sample_rate, prtd->num_channels,
+					bits_per_sample, sample_word_size);
+#else
 		ret = q6asm_enc_cfg_blk_pcm_format_support_v4(prtd->audio_client,
 					prtd->sample_rate, prtd->num_channels,
 					bits_per_sample, sample_word_size,
 					ASM_LITTLE_ENDIAN, DEFAULT_QF);
+#endif /* CONFIG_ARCH_MSM8916 */
 	}
 
 	return ret;
@@ -2668,10 +2698,17 @@ static int msm_compr_trigger(struct snd_compr_stream *cstream, int cmd)
 
 		pr_debug("%s: open_write stream_id %d bits_per_sample %d",
 				__func__, stream_id, bits_per_sample);
+#ifdef CONFIG_ARCH_MSM8916
+		rc = q6asm_stream_open_write_v3(prtd->audio_client,
+				prtd->codec, bits_per_sample,
+				stream_id,
+				prtd->gapless_state.use_dsp_gapless_mode);
+#else
 		rc = q6asm_stream_open_write_v4(prtd->audio_client,
 				prtd->codec, bits_per_sample,
 				stream_id,
 				prtd->gapless_state.use_dsp_gapless_mode);
+#endif /* CONFIG_ARCH_MSM8916 */
 		if (rc < 0) {
 			pr_err("%s: Session out open failed for gapless\n",
 				 __func__);
