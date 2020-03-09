@@ -42,8 +42,6 @@ extern struct regmap_config wsa881x_ana_regmap_config[2];
 int wsa881x_get_client_index(void);
 int wsa881x_get_probing_count(void);
 int wsa881x_get_presence_count(void);
-int wsa881x_set_mclk_callback(
-	int (*enable_mclk_callback)(struct snd_soc_card *, bool));
 void wsa881x_update_reg_defaults_2_0(void);
 void wsa881x_update_regmap_2_0(struct regmap *regmap, int flag);
 

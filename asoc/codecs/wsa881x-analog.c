@@ -890,8 +890,6 @@ static const struct snd_soc_dapm_route wsa881x_audio_map[] = {
 static int wsa881x_startup(struct wsa881x_pdata *pdata)
 {
 	int ret = 0;
-	struct snd_soc_codec *codec = pdata->codec;
-	struct snd_soc_card *card = codec->component.card;
 
 	pr_debug("%s(): wsa startup, enable_cnt:%d\n", __func__,
 					pdata->enable_cnt);
@@ -913,7 +911,6 @@ static int wsa881x_startup(struct wsa881x_pdata *pdata)
 static int wsa881x_shutdown(struct wsa881x_pdata *pdata)
 {
 	int ret = 0;
-	struct snd_soc_codec *codec = pdata->codec;
 
 	pr_debug("%s(): wsa shutdown, enable_cnt:%d\n", __func__,
 					pdata->enable_cnt);
@@ -1157,19 +1154,6 @@ int wsa881x_get_presence_count(void)
 }
 EXPORT_SYMBOL(wsa881x_get_presence_count);
 
-int wsa881x_set_mclk_callback(
-	int (*enable_mclk_callback)(struct snd_soc_card *, bool))
-{
-	int i;
-
-	for (i = 0; i < MAX_WSA881X_DEVICE; i++) {
-		if (wsa_pdata[i].status == WSA881X_STATUS_I2C)
-			wsa_pdata[i].enable_mclk = enable_mclk_callback;
-	}
-	return 0;
-}
-EXPORT_SYMBOL(wsa881x_set_mclk_callback);
-
 static int check_wsa881x_presence(struct i2c_client *client)
 {
 	int ret = 0;
@@ -1219,7 +1203,7 @@ static int wsa881x_populate_dt_pdata(struct device *dev, int wsa881x_index)
 				"qcom,wsa-analog-clk-gpio", 0);
 	pdata->wsa_reset_gpio_p = of_parse_phandle(dev->of_node,
 				"qcom,wsa-analog-reset-gpio", 0);
-	pinctrl_init = true;
+
 	return ret;
 }
 
