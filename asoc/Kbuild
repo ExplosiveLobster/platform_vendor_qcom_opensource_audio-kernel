@@ -54,6 +54,11 @@ ifeq ($(KERNEL_BUILD), 0)
 		export
 		INCS    +=  -include $(AUDIO_ROOT)/config/qcs405autoconf.h
 	endif
+	ifeq ($(CONFIG_ARCH_MSM8916), y)
+		include $(AUDIO_ROOT)/config/msm8952auto.conf
+		export
+		INCS    +=  -include $(AUDIO_ROOT)/config/msm8952autoconf.h
+	endif
 endif
 
 # As per target team, build is done as follows:
@@ -119,6 +124,17 @@ endif
 # for qcs405 sound card driver
 ifdef CONFIG_SND_SOC_QCS405
 	MACHINE_OBJS += qcs405.o
+endif
+
+# for MSM8952 internal codec sound card driver
+ifdef CONFIG_SND_SOC_MSM8952
+	MACHINE_OBJS += msm8952.o
+endif
+
+# for MSM8952 external codec sound card driver
+ifdef CONFIG_SND_SOC_EXT_CODEC_MSM8952
+	MACHINE_EXT_OBJS += msm8952-slimbus.o
+	MACHINE_EXT_OBJS += msm8952-dai-links.o
 endif
 
 ifdef CONFIG_SND_SOC_CPE
@@ -223,6 +239,12 @@ machine_dlkm-y := $(MACHINE_OBJS)
 
 obj-$(CONFIG_SND_SOC_QCS405) += machine_dlkm.o
 machine_dlkm-y := $(MACHINE_OBJS)
+
+obj-$(CONFIG_SND_SOC_MSM8952) += machine_dlkm.o
+machine_dlkm-y := $(MACHINE_OBJS)
+
+obj-$(CONFIG_SND_SOC_EXT_CODEC_MSM8952) += machine_ext_dlkm.o
+machine_ext_dlkm-y := $(MACHINE_EXT_OBJS)
 
 obj-$(CONFIG_SND_SOC_EXT_CODEC) += machine_dlkm.o
 machine_dlkm-y := $(MACHINE_OBJS)

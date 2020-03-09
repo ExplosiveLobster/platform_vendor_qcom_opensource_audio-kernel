@@ -26,6 +26,9 @@ endif
 ifeq ($(TARGET_SUPPORT), sdmsteppe)
 KBUILD_OPTIONS += CONFIG_ARCH_SM6150=y
 endif
+ifeq ($(TARGET_SUPPORT), msm8952)
+KBUILD_OPTIONS += CONFIG_ARCH_MSM8916=y
+endif
 
 obj-m := ipc/
 obj-m += dsp/
